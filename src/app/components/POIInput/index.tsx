@@ -12,12 +12,20 @@ export interface POIInputProps {
   className?: string;
   placeholder?: string;
   value?: DetailedPOI | null;
+  autoFocus?: boolean;
   disabled?: boolean;
-  onChange?: (selection: DetailedPOI) => void;
+  onChange?: (selection: DetailedPOI | null) => void;
 }
 
 export const POIInput = memo(
-  ({ className, placeholder, value, disabled, onChange }: POIInputProps) => {
+  ({
+    className,
+    placeholder,
+    value,
+    autoFocus,
+    disabled,
+    onChange,
+  }: POIInputProps) => {
     const [keyword, setKeyword] = useState('');
     const [debouncedKeyword] = useDebounce(keyword, 200);
     const [searchResults, setSearchResults] = useState<DetailedPOI[]>([]);
@@ -62,6 +70,12 @@ export const POIInput = memo(
       },
       [onChange, searchResults],
     );
+    const handleClear = useCallback(() => {
+      setKeyword('');
+      if (onChange) {
+        onChange(null);
+      }
+    }, [onChange]);
     return (
       <Select<LabeledValue>
         className={className}
@@ -69,8 +83,10 @@ export const POIInput = memo(
         value={
           value ? { label: <POILabel poi={value} />, value: value.id } : null
         }
+        autoFocus={autoFocus}
         disabled={disabled}
         size="large"
+        allowClear
         showSearch
         showArrow={false}
         filterOption={false}
@@ -78,6 +94,7 @@ export const POIInput = memo(
         options={options}
         //@ts-ignore
         onChange={handleChange}
+        onClear={handleClear}
         onSearch={handleSearch}
       />
     );
