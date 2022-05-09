@@ -26,7 +26,7 @@ const POI_TYPES = [
 class POIServiceImpl {
   // private _autocomplete: AMap.Autocomplete | undefined;
   // private _placeSearch: AMap.PlaceSearch | undefined;
-  private _detailedPlaceSearch: AMap.PlaceSearch | undefined;
+  private _internal: AMap.PlaceSearch | undefined;
 
   // private get _internalAutocomplete() {
   //   if (!this._autocomplete) {
@@ -45,14 +45,14 @@ class POIServiceImpl {
   //   return this._placeSearch;
   // }
 
-  private get _internalDetailedPlaceSearch() {
-    if (!this._detailedPlaceSearch) {
-      this._detailedPlaceSearch = new AMap.PlaceSearch({
+  private get internal() {
+    if (!this._internal) {
+      this._internal = new AMap.PlaceSearch({
         extensions: 'all',
         type: POI_TYPES.join('|'),
       });
     }
-    return this._detailedPlaceSearch;
+    return this._internal;
   }
 
   autocomplete(keyword: string) {
@@ -61,7 +61,7 @@ class POIServiceImpl {
 
   search(keyword: string) {
     return new Promise<DetailedPOI[]>((resolve, reject) => {
-      this._internalDetailedPlaceSearch.search(
+      this.internal.search(
         keyword,
         this._createPlaceSearchCallback(resolve, reject),
       );
@@ -70,7 +70,7 @@ class POIServiceImpl {
 
   getDetails(poiId: string) {
     return new Promise<DetailedPOI[]>((resolve, reject) => {
-      this._internalDetailedPlaceSearch.getDetails(
+      this.internal.getDetails(
         poiId,
         this._createPlaceSearchCallback(resolve, reject),
       );
@@ -92,5 +92,3 @@ class POIServiceImpl {
 }
 
 export const POIService = new POIServiceImpl();
-
-(window as any).POIService = POIService;
