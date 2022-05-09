@@ -4,17 +4,6 @@ import type { Activity, DetailedPOI, Trip, TripDay } from '../types';
 
 import { getDayIndex } from './trip-day';
 
-export function formatActivity(activity: Activity) {
-  if (activity.poi) {
-    const poi = activity.poi;
-    if (poi.type.includes('地名')) {
-      return poi.name;
-    }
-    return poi.adname;
-  }
-  return '未知';
-}
-
 export function getLastActivityOfDay(day: TripDay, trip: Trip) {
   if (day.activities.length > 0) {
     return day.activities[day.activities.length - 1];

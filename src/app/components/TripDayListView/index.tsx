@@ -2,7 +2,7 @@ import cn from 'classnames';
 import { memo, useCallback, useMemo } from 'react';
 
 import type { Trip, TripDay } from '@/core/types';
-import { formatDay } from '@/core/biz';
+import { formatDay } from '@/core/util/format';
 
 import styles from './index.module.less';
 import moment from 'moment';
