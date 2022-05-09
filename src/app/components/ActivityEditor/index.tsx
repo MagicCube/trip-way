@@ -1,3 +1,4 @@
+import { MinusCircleFilled } from '@ant-design/icons';
 import cn from 'classnames';
 import { memo, useCallback } from 'react';
 
@@ -12,13 +13,24 @@ export interface ActivityEditorProps {
   className?: string;
   activity: Activity;
   readonly?: boolean;
+  autoFocus?: boolean;
+  allowRemove?: boolean;
   onChange?: (activity: Activity) => void;
+  onRemove?: (activityId: string) => void;
 }
 
 export const ActivityEditor = memo(
-  ({ className, activity, readonly, onChange }: ActivityEditorProps) => {
+  ({
+    className,
+    activity,
+    readonly,
+    autoFocus,
+    allowRemove,
+    onChange,
+    onRemove,
+  }: ActivityEditorProps) => {
     const handleChange = useCallback(
-      (poi: DetailedPOI) => {
+      (poi: DetailedPOI | null) => {
         const changedActivity = updatePOIOfActivity(poi, activity);
         if (onChange) {
           onChange(changedActivity);
@@ -26,6 +38,11 @@ export const ActivityEditor = memo(
       },
       [activity, onChange],
     );
+    const handleRemove = useCallback(() => {
+      if (onRemove) {
+        onRemove(activity.id);
+      }
+    }, [activity, onRemove]);
     return (
       <div className={cn(styles.container, className)}>
         <div className={styles.left}></div>
@@ -33,11 +50,19 @@ export const ActivityEditor = memo(
           <POIInput
             className={styles.input}
             value={activity.poi}
+            autoFocus={autoFocus}
             disabled={readonly}
             onChange={handleChange}
           />
         </div>
-        <div className={styles.right}></div>
+        <div className={styles.right}>
+          {allowRemove !== false && (
+            <MinusCircleFilled
+              className={styles.removeButton}
+              onClick={handleRemove}
+            />
+          )}
+        </div>
       </div>
     );
   },

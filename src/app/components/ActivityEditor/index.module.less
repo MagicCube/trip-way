@@ -9,16 +9,33 @@
 }
 
 .left {
+  display: flex;
   flex-shrink: 0;
+  align-items: center;
   width: 40px;
 }
 
 .middle {
+  display: flex;
   flex-grow: 1;
   min-width: 1px;
 }
 
 .right {
+  display: flex;
   flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
   width: 40px;
+}
+
+.removeButton:global(.anticon) {
+  color: var(--text-color-secondary);
+  font-size: 1.25em;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.removeButton:global(.anticon):hover {
+  opacity: 1;
 }
