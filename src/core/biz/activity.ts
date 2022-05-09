@@ -10,7 +10,7 @@ export function formatActivity(activity: Activity) {
     if (poi.type.includes('地名')) {
       return poi.name;
     }
-    return poi.cityname;
+    return poi.adname;
   }
   return '未知';
 }
