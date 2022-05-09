@@ -30,8 +30,15 @@ export function getActivitiesOfDay(day: TripDay, trip: Trip) {
   return results;
 }
 
-export function updatePOIOfActivity(poi: DetailedPOI, activity: Activity) {
+export function updatePOIOfActivity(
+  poi: DetailedPOI | null,
+  activity: Activity,
+) {
   return immer(activity, (draft) => {
-    draft.poi = poi;
+    if (poi) {
+      draft.poi = poi;
+    } else {
+      delete draft.poi;
+    }
   });
 }
