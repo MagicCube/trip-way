@@ -1,7 +1,11 @@
 import cn from 'classnames';
 import { useCallback, useMemo } from 'react';
 
-import { getActivitiesOfDay, updateActivityOfDay } from '@/core/biz';
+import {
+  getActivitiesOfDay,
+  getDayIndex,
+  updateActivityOfDay,
+} from '@/core/biz';
 import type { Trip, Activity, TripDay } from '@/core/types';
 
 import { ActivityEditor } from '../ActivityEditor';
@@ -36,14 +40,17 @@ export const ActivitiesEditor = ({
     [day, onChange],
   );
 
+  const dayIndex = useMemo(() => getDayIndex(day, trip), [day, trip]);
+
   return (
     <div className={cn(styles.container, className)}>
       <ul className={styles.list}>
-        {activities.map((activity) => {
+        {activities.map((activity, i) => {
           return (
             <li key={activity.id} className={styles.item}>
               <ActivityEditor
                 activity={activity}
+                readonly={i === 0 && dayIndex !== 0}
                 onChange={handleActivityChange}
               />
             </li>

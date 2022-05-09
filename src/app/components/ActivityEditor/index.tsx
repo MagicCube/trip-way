@@ -11,11 +11,12 @@ import styles from './index.module.less';
 export interface ActivityEditorProps {
   className?: string;
   activity: Activity;
+  readonly?: boolean;
   onChange?: (activity: Activity) => void;
 }
 
 export const ActivityEditor = memo(
-  ({ className, activity, onChange }: ActivityEditorProps) => {
+  ({ className, activity, readonly, onChange }: ActivityEditorProps) => {
     const handleChange = useCallback(
       (poi: DetailedPOI) => {
         const changedActivity = updatePOIOfActivity(poi, activity);
@@ -32,6 +33,7 @@ export const ActivityEditor = memo(
           <POIInput
             className={styles.input}
             value={activity.poi}
+            disabled={readonly}
             onChange={handleChange}
           />
         </div>
