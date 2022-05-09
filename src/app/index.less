@@ -1,5 +1,9 @@
 @import './styles/variables.less';
 
+* {
+  font-smooth: always;
+}
+
 html,
 body,
 #tw-app-root {
@@ -16,4 +20,9 @@ h2,
 h3,
 h4 {
   margin: 0;
+}
+
+.ant-btn > .anticon + span,
+.ant-btn > span + .anticon {
+  margin-left: var(--padding-smallest);
 }
