@@ -1,3 +1,5 @@
+@import '../../styles/mixins.less';
+
 .container {
   display: flex;
   list-style: none;
@@ -74,24 +76,9 @@
 }
 
 .displayName {
-  width: 80px;
+  .text-overflow-mask(80px);
   font-weight: bold;
   font-size: var(--font-size-base);
-
-  white-space: nowrap;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    #000 0%,
-    #000 calc(100% - 24px),
-    transparent
-  );
-  mask-image: linear-gradient(
-    90deg,
-    #000 0%,
-    #000 calc(100% - 24px),
-    transparent
-  );
 }
 
 .date {

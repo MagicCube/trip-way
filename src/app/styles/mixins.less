@@ -1,0 +1,18 @@
+.text-overflow-mask(@width) {
+  display: inline-block;
+  width: @width;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    #000 0%,
+    #000 calc(100% - 24px),
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    #000 0%,
+    #000 calc(100% - 24px),
+    transparent
+  );
+}
