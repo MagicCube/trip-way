@@ -15,5 +15,6 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     https: true,
+    open: 'https://localhost:3000/trips/0',
   },
 });
