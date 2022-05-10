@@ -72,7 +72,7 @@ export const ActivityEditor = memo(
                   或移动至其他日期
                 </p>
               }
-              mouseEnterDelay={__globalDragTooltipVisible ? 0.5 : 5}
+              mouseEnterDelay={__globalDragTooltipVisible ? 0.1 : 5}
               onVisibleChange={handleDragTooltipVisibleChange}
             >
               <HolderOutlined className={styles.handlebar} />
