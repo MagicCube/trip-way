@@ -22,6 +22,10 @@ export const TripDetailView = ({
   onChange,
 }: TripDetailViewProps) => {
   const [selectedDayId, setSelectedDayId] = useState<string | null>(null);
+  const selectedDay = useMemo(
+    () => trip.days.find((day) => day.id === selectedDayId),
+    [selectedDayId, trip.days],
+  );
   const handleDaySelect = useCallback((dayId: string | null) => {
     setSelectedDayId(dayId);
   }, []);
@@ -31,12 +35,9 @@ export const TripDetailView = ({
       if (onChange) {
         onChange(changedTrip, day);
       }
+      //TODO: Routes
     },
     [onChange, trip],
-  );
-  const selectedDay = useMemo(
-    () => trip.days.find((day) => day.id === selectedDayId),
-    [selectedDayId, trip.days],
   );
   return (
     <div className={cn(styles.container, className)}>
@@ -54,14 +55,20 @@ export const TripDetailView = ({
         </nav>
         <main className={styles.mainContent}>
           {selectedDay && (
-            <section>
-              <h3>目的地</h3>
-              <ActivitiesEditor
-                trip={trip}
-                day={selectedDay}
-                onChange={handleActivitiesChanged}
-              />
-            </section>
+            <>
+              <section>
+                <h3>目的地</h3>
+                <ActivitiesEditor
+                  trip={trip}
+                  day={selectedDay}
+                  onChange={handleActivitiesChanged}
+                />
+              </section>
+              <section>
+                <h3>路线</h3>
+                <RouteListView />
+              </section>
+            </>
           )}
         </main>
       </main>
