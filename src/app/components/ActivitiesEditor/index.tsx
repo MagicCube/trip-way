@@ -1,13 +1,16 @@
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import cn from 'classnames';
+import type { DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useCallback, useMemo } from 'react';
 
 import {
   appendNewActivityToDay,
-  getActivitiesOfDay,
   getDayIndex,
+  getLastActivityOfPreviousDay,
   removeActivityFromDay,
+  moveActivitiesOfDay as reorderActivitiesOfDay,
   updateActivityOfDay,
 } from '@/core/biz';
 import type { Trip, Activity, TripDay } from '@/core/types';
@@ -29,11 +32,11 @@ export const ActivitiesEditor = ({
   trip,
   onChange,
 }: ActivitiesEditorProps) => {
-  const activities = useMemo<Activity[]>(
-    () => getActivitiesOfDay(day, trip),
+  const dayIndex = useMemo(() => getDayIndex(day, trip), [day, trip]);
+  const lastActivity = useMemo(
+    () => getLastActivityOfPreviousDay(day, trip),
     [day, trip],
   );
-  const dayIndex = useMemo(() => getDayIndex(day, trip), [day, trip]);
 
   const handleActivityChange = useCallback(
     (activity: Activity) => {
@@ -62,39 +65,97 @@ export const ActivitiesEditor = ({
     [day, onChange],
   );
 
-  const reachActivitiesLimit = activities.length >= 18;
+  const handleDragEnd = useCallback(
+    (result: DropResult) => {
+      if (result.destination) {
+        console.info(
+          'handleDragEnd',
+          result.source.index,
+          result.destination.index,
+        );
+        const changedDay = reorderActivitiesOfDay(
+          result.source.index,
+          result.destination.index,
+          day,
+        );
+        if (onChange) {
+          onChange(changedDay);
+        }
+      }
+    },
+    [day, onChange],
+  );
+
+  const reachActivitiesLimit = day.activities.length >= 17;
 
   return (
     <div className={cn(styles.container, className)}>
       <ul className={styles.list}>
-        {activities.map((activity, i) => {
-          const readonly = i === 0 && dayIndex !== 0;
-          const allowRemove = !readonly && !(i === 0 && dayIndex === 0);
-          return (
-            <li key={activity.id} className={styles.item}>
-              <ActivityEditor
-                activity={activity}
-                autoFocus={activity.poi === undefined}
-                readonly={readonly}
-                allowRemove={allowRemove}
-                onChange={handleActivityChange}
-                onRemove={handleActivityRemove}
-              />
-            </li>
-          );
-        })}
-        {!reachActivitiesLimit && (
-          <li className={styles.appendItem}>
-            <Button
-              type="link"
-              icon={<PlusCircleOutlined />}
-              onClick={handleActivityAppend}
-            >
-              添加目的地
-            </Button>
+        {lastActivity && (
+          <li className={styles.item}>
+            <ActivityEditor
+              activity={lastActivity}
+              autoFocus={lastActivity.poi === undefined}
+              readonly
+              allowRemove={false}
+              onChange={handleActivityChange}
+              onRemove={handleActivityRemove}
+            />
           </li>
         )}
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="activities">
+            {(droppableProvided) => {
+              return (
+                <ul
+                  ref={droppableProvided.innerRef}
+                  className={styles.innerList}
+                >
+                  {day.activities.map((activity, activityIndex) => {
+                    return (
+                      <Draggable
+                        key={activity.id}
+                        draggableId={activity.id}
+                        index={activityIndex}
+                      >
+                        {(draggableProvided) => {
+                          return (
+                            <li
+                              ref={draggableProvided.innerRef}
+                              className={styles.item}
+                              {...draggableProvided.draggableProps}
+                              {...draggableProvided.dragHandleProps}
+                            >
+                              <ActivityEditor
+                                activity={activity}
+                                autoFocus={activity.poi === undefined}
+                                onChange={handleActivityChange}
+                                onRemove={handleActivityRemove}
+                              />
+                            </li>
+                          );
+                        }}
+                      </Draggable>
+                    );
+                  })}
+                  {droppableProvided.placeholder}
+                </ul>
+              );
+            }}
+          </Droppable>
+        </DragDropContext>
       </ul>
+      {!reachActivitiesLimit && (
+        <div className={styles.appendItem}>
+          <Button
+            type="link"
+            icon={<PlusCircleOutlined />}
+            onClick={handleActivityAppend}
+          >
+            添加目的地
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

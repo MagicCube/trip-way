@@ -31,3 +31,25 @@ export function removeActivityFromDay(activityId: string, day: TripDay) {
     }
   });
 }
+
+export function moveActivitiesOfDay(
+  sourceIndex: number,
+  destIndex: number,
+  day: TripDay,
+) {
+  console.info(
+    'before',
+    sourceIndex,
+    destIndex,
+    day.activities.map((a) => a.poi?.name),
+  );
+  return immer(day, (draft) => {
+    const tmp = draft.activities[sourceIndex];
+    draft.activities.splice(sourceIndex, 1);
+    draft.activities.splice(destIndex, 0, tmp);
+    console.info(
+      'after',
+      draft.activities.map((a) => a.poi?.name),
+    );
+  });
+}
