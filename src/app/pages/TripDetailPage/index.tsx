@@ -17,7 +17,11 @@ export const TripDetailPage = () => {
         const pois = getPOIsOfDay(changedDay, trip);
         if (pois.length >= 2) {
           const routes = await NavigationService.search(pois);
-          // console.info('Routes', routes);
+          // console.info(
+          //   'Routes',
+          //   pois.map((poi) => poi.name),
+          //   routes,
+          // );
         }
       }
     },

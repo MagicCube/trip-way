@@ -12,7 +12,8 @@
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  width: 40px;
+  justify-content: center;
+  width: 32px;
 }
 
 .middle {
@@ -27,6 +28,15 @@
   align-items: center;
   justify-content: center;
   width: 40px;
+}
+
+.handlebar {
+  opacity: 0;
+  font-size: 1.2rem;
+}
+
+.container:hover .handlebar {
+  opacity: 1;
 }
 
 .removeButton:global(.anticon) {

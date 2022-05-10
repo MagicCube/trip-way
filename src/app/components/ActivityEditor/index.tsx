@@ -1,6 +1,6 @@
-import { MinusCircleFilled } from '@ant-design/icons';
+import { HolderOutlined, MinusCircleFilled } from '@ant-design/icons';
 import cn from 'classnames';
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useState } from 'react';
 
 import { updatePOIOfActivity } from '@/core/biz';
 import type { Activity, DetailedPOI } from '@/core/types';
@@ -8,16 +8,20 @@ import type { Activity, DetailedPOI } from '@/core/types';
 import { POIInput } from '../POIInput';
 
 import styles from './index.module.less';
+import { Tooltip } from 'antd';
 
 export interface ActivityEditorProps {
   className?: string;
   activity: Activity;
   readonly?: boolean;
   autoFocus?: boolean;
+  allowReorder?: boolean;
   allowRemove?: boolean;
   onChange?: (activity: Activity) => void;
   onRemove?: (activityId: string) => void;
 }
+
+let __globalDragTooltipVisible = true;
 
 export const ActivityEditor = memo(
   ({
@@ -25,10 +29,14 @@ export const ActivityEditor = memo(
     activity,
     readonly,
     autoFocus,
+    allowReorder,
     allowRemove,
     onChange,
     onRemove,
   }: ActivityEditorProps) => {
+    const [dragTooltipVisible, setDragTooltipVisible] = useState(
+      __globalDragTooltipVisible,
+    );
     const handleChange = useCallback(
       (poi: DetailedPOI | null) => {
         const changedActivity = updatePOIOfActivity(poi, activity);
@@ -43,9 +51,34 @@ export const ActivityEditor = memo(
         onRemove(activity.id);
       }
     }, [activity, onRemove]);
+    const handleDragTooltipVisibleChange = useCallback(
+      (visible: boolean) => {
+        if (dragTooltipVisible && visible) {
+          setDragTooltipVisible(false);
+          __globalDragTooltipVisible = false;
+        }
+      },
+      [dragTooltipVisible],
+    );
     return (
       <div className={cn(styles.container, className)}>
-        <div className={styles.left}></div>
+        <div className={styles.left}>
+          {allowReorder !== false && (
+            <Tooltip
+              title={
+                <p>
+                  拖动可重新排序，
+                  <br />
+                  或移动至其他日期
+                </p>
+              }
+              mouseEnterDelay={__globalDragTooltipVisible ? 0.5 : 5}
+              onVisibleChange={handleDragTooltipVisibleChange}
+            >
+              <HolderOutlined className={styles.handlebar} />
+            </Tooltip>
+          )}
+        </div>
         <div className={styles.middle}>
           <POIInput
             className={styles.input}
@@ -57,10 +90,12 @@ export const ActivityEditor = memo(
         </div>
         <div className={styles.right}>
           {allowRemove !== false && (
-            <MinusCircleFilled
-              className={styles.removeButton}
-              onClick={handleRemove}
-            />
+            <Tooltip title="移除此目的地">
+              <MinusCircleFilled
+                className={styles.removeButton}
+                onClick={handleRemove}
+              />
+            </Tooltip>
           )}
         </div>
       </div>

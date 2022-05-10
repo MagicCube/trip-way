@@ -10,7 +10,7 @@ import {
   getDayIndex,
   getLastActivityOfPreviousDay,
   removeActivityFromDay,
-  moveActivitiesOfDay as reorderActivitiesOfDay,
+  reorderActivitiesOfDay as reorderActivitiesOfDay,
   updateActivityOfDay,
 } from '@/core/biz';
 import type { Trip, Activity, TripDay } from '@/core/types';
@@ -97,6 +97,7 @@ export const ActivitiesEditor = ({
               activity={lastActivity}
               autoFocus={lastActivity.poi === undefined}
               readonly
+              allowReorder={false}
               allowRemove={false}
               onChange={handleActivityChange}
               onRemove={handleActivityRemove}
