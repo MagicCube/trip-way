@@ -32,7 +32,7 @@ export function removeActivityFromDay(activityId: string, day: TripDay) {
   });
 }
 
-export function moveActivitiesOfDay(
+export function reorderActivitiesOfDay(
   sourceIndex: number,
   destIndex: number,
   day: TripDay,
