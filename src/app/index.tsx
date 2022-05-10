@@ -14,6 +14,7 @@ import 'antd/dist/antd.css';
 import './index.less';
 
 moment.locale('zh-cn');
+(window as any).moment = moment;
 
 async function main() {
   await AMapReady();
