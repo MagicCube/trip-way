@@ -81,14 +81,20 @@ class POIServiceImpl {
     resolve: (pois: P[]) => void,
     reject: (error: Error) => void,
   ) {
-    return (status: string, result: AMap.PlaceSearchResult) => {
-      if (status === 'complete') {
+    return (
+      status: AMap.CallbackStatus,
+      result: AMap.PlaceSearchResult | string,
+    ) => {
+      if (status === 'complete' && typeof result === 'object') {
         resolve(result.poiList.pois as P[]);
+      } else if (status === 'no_data') {
+        resolve([]);
       } else {
-        reject(new Error(status));
+        reject(new Error(result as string));
       }
     };
   }
 }
 
 export const POIService = new POIServiceImpl();
+(window as any).POIService = POIService;
