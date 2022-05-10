@@ -13,7 +13,7 @@ import styles from './index.module.less';
 export interface TripDetailViewProps {
   className?: string;
   trip: Trip;
-  onChange?: (trip: Trip) => void;
+  onChange?: (trip: Trip, day: TripDay | null) => void;
 }
 
 export const TripDetailView = ({
@@ -29,7 +29,7 @@ export const TripDetailView = ({
     (day: TripDay) => {
       const changedTrip = updateDayOfTrip(day, trip);
       if (onChange) {
-        onChange(changedTrip);
+        onChange(changedTrip, day);
       }
     },
     [onChange, trip],
@@ -55,7 +55,7 @@ export const TripDetailView = ({
         <main className={styles.mainContent}>
           {selectedDay && (
             <section>
-              <h3>当日行程安排</h3>
+              <h3>目的地</h3>
               <ActivitiesEditor
                 trip={trip}
                 day={selectedDay}
