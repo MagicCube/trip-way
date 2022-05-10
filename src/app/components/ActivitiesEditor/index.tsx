@@ -62,6 +62,8 @@ export const ActivitiesEditor = ({
     [day, onChange],
   );
 
+  const reachActivitiesLimit = activities.length >= 18;
+
   return (
     <div className={cn(styles.container, className)}>
       <ul className={styles.list}>
@@ -81,15 +83,17 @@ export const ActivitiesEditor = ({
             </li>
           );
         })}
-        <li className={styles.appendItem}>
-          <Button
-            type="link"
-            icon={<PlusCircleOutlined />}
-            onClick={handleActivityAppend}
-          >
-            添加新行程
-          </Button>
-        </li>
+        {!reachActivitiesLimit && (
+          <li className={styles.appendItem}>
+            <Button
+              type="link"
+              icon={<PlusCircleOutlined />}
+              onClick={handleActivityAppend}
+            >
+              添加目的地
+            </Button>
+          </li>
+        )}
       </ul>
     </div>
   );
