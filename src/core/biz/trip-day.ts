@@ -1,6 +1,6 @@
 import immer from 'immer';
 
-import type { TripDay, Trip, Activity } from '../types';
+import type { TripDay, Trip, Activity, DriveRoute } from '../types';
 import { uuid } from '../util/uuid';
 
 export function getDayIndex(day: TripDay, trip: Trip) {
@@ -13,6 +13,12 @@ export function updateActivityOfDay(activity: Activity, day: TripDay) {
     if (activityIndex >= 0) {
       draft.activities[activityIndex] = activity;
     }
+  });
+}
+
+export function updateRouteOfDay(route: DriveRoute | null, day: TripDay) {
+  return immer(day, (draft) => {
+    draft.route = route;
   });
 }
 
@@ -37,19 +43,9 @@ export function reorderActivitiesOfDay(
   destIndex: number,
   day: TripDay,
 ) {
-  console.info(
-    'before',
-    sourceIndex,
-    destIndex,
-    day.activities.map((a) => a.poi?.name),
-  );
   return immer(day, (draft) => {
     const tmp = draft.activities[sourceIndex];
     draft.activities.splice(sourceIndex, 1);
     draft.activities.splice(destIndex, 0, tmp);
-    console.info(
-      'after',
-      draft.activities.map((a) => a.poi?.name),
-    );
   });
 }
