@@ -1,34 +1,57 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { MapView, Marker, Polyline } from '@/app/components/MapView';
 import { TripDetailView } from '@/app/components/TripDetailView';
-import { getPOIsOfDay } from '@/core/biz';
-import type { DetailedPOI, DriveRoute, Trip, TripDay } from '@/core/types';
-
-import styles from './index.module.less';
+import {
+  combinePathOfRoute,
+  getPOIsOfDay,
+  updateRoutesBasedOnChanges,
+} from '@/core/biz';
 import { loadTrip, saveTrip } from '@/core/storage';
+import type { Trip, TripDay } from '@/core/types';
 import { MOCKED_TRIP } from '@/mock/trip';
 
+import styles from './index.module.less';
+
 export const TripDetailPage = () => {
+  const params = useParams<{ tripId: string }>();
   const [trip, setTrip] = useState<Trip | null>(null);
-  const [pois, setPOIs] = useState<DetailedPOI[]>([]);
-  const [route, setRoute] = useState<DriveRoute | null>(null);
+  const [selectedDay, setSelectedDay] = useState<TripDay | null>(null);
+  const pois = useMemo(() => {
+    if (trip && selectedDay) {
+      return getPOIsOfDay(selectedDay, trip);
+    } else {
+      return [];
+    }
+  }, [selectedDay, trip]);
+  const routePath = useMemo(() => {
+    if (trip && selectedDay?.route) {
+      return combinePathOfRoute(selectedDay.route);
+    }
+    return null;
+  }, [selectedDay?.route, trip]);
   useEffect(() => {
-    loadTrip('MOCK_9b145ee8').then((loadedTrip) => {
-      if (!loadedTrip) {
-        setTrip(MOCKED_TRIP);
-      } else {
-        setTrip(loadedTrip);
-      }
-    });
-  }, []);
+    if (params.tripId) {
+      loadTrip(params.tripId).then((loadedTrip) => {
+        if (!loadedTrip) {
+          if (params.tripId === 'MOCK_9b145ee8') {
+            setTrip(MOCKED_TRIP);
+          } else {
+            setTrip(null);
+          }
+        } else {
+          setTrip(loadedTrip);
+        }
+      });
+    }
+  }, [params.tripId]);
   const handleDaySelect = useCallback(
     (dayId: string | null) => {
       if (!trip) return;
       const day =
         dayId !== null ? trip.days.find((day) => day.id === dayId) : undefined;
       if (day) {
-        setPOIs(getPOIsOfDay(day, trip));
-        setRoute(day.route || null);
+        setSelectedDay(day);
       }
     },
     [trip],
@@ -38,6 +61,16 @@ export const TripDetailPage = () => {
       if (!trip) return;
       setTrip(changedTrip);
       await saveTrip(changedTrip);
+      if (changedDay) {
+        await updateRoutesBasedOnChanges(
+          changedDay,
+          changedTrip,
+          async (newlyChangedTrip) => {
+            setTrip(newlyChangedTrip);
+            await saveTrip(newlyChangedTrip);
+          },
+        );
+      }
     },
     [trip],
   );
@@ -48,12 +81,15 @@ export const TripDetailPage = () => {
     <div className={styles.container}>
       <MapView className={styles.map}>
         {pois.map((poi) => (
-          <Marker key={poi.id} location={poi.location} />
+          <Marker
+            key={poi.id}
+            location={poi.location}
+            autoZoom={pois.length === 1}
+          />
         ))}
-        {route &&
-          route.steps.map((step, i) => (
-            <Polyline key={`step-${i}`} path={step.path} />
-          ))}
+        {routePath && routePath?.length > 0 && (
+          <Polyline path={routePath} autoZoom />
+        )}
       </MapView>
       <TripDetailView
         className={styles.tripDetail}
