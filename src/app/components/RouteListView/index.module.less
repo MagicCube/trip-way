@@ -1,0 +1,38 @@
+.container {
+  background: white;
+  border-radius: 8px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  padding: var(--padding);
+}
+
+.policy {
+  font-size: var(--font-size-large);
+}
+
+.details {
+  display: flex;
+  color: var(--text-color-secondary);
+}
+
+.details span {
+  &::after {
+    content: '|';
+    margin-left: var(--padding-small);
+    margin-right: var(--padding-small);
+    color: var(--text-color-tertiary);
+  }
+
+  &:last-child::after {
+    display: none;
+  }
+}

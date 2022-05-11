@@ -1,10 +1,12 @@
 import cn from 'classnames';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import type { Trip, TripDay } from '@/core/types';
-import { updateDayOfTrip } from '@/core/biz';
+import { getPOIsOfDay, updateDayOfTrip, updateRouteOfDay } from '@/core/biz';
+import { NavigationService } from '@/core/geo';
+import type { DriveRoute, Trip, TripDay } from '@/core/types';
 
 import { ActivitiesEditor } from '../ActivitiesEditor';
+import { RouteListView } from '../RouteListView';
 import { TripBanner } from '../TripBanner';
 import { TripDayListView } from '../TripDayListView';
 
@@ -14,28 +16,53 @@ export interface TripDetailViewProps {
   className?: string;
   trip: Trip;
   onChange?: (trip: Trip, day: TripDay | null) => void;
+  onDaySelect?: (dayId: string | null) => void;
 }
 
 export const TripDetailView = ({
   className,
   trip: trip,
   onChange,
+  onDaySelect,
 }: TripDetailViewProps) => {
   const [selectedDayId, setSelectedDayId] = useState<string | null>(null);
-  const selectedDay = useMemo(
-    () => trip.days.find((day) => day.id === selectedDayId),
-    [selectedDayId, trip.days],
+  const [selectedDay, setSelectedDay] = useState<TripDay | null>(null);
+  const [routes, setRoutes] = useState<DriveRoute[]>([]);
+  useEffect(() => {
+    const d = trip.days.find((day) => day.id === selectedDayId) || null;
+    setSelectedDay(d);
+    if (d?.route) {
+      setRoutes([d.route]);
+    } else {
+      setRoutes([]);
+    }
+  }, [selectedDayId, trip.days]);
+  const handleDaySelect = useCallback(
+    (dayId: string | null) => {
+      setSelectedDayId(dayId);
+      if (onDaySelect) {
+        onDaySelect(dayId);
+      }
+    },
+    [onDaySelect],
   );
-  const handleDaySelect = useCallback((dayId: string | null) => {
-    setSelectedDayId(dayId);
-  }, []);
   const handleActivitiesChanged = useCallback(
-    (day: TripDay) => {
+    async (day: TripDay) => {
       const changedTrip = updateDayOfTrip(day, trip);
       if (onChange) {
         onChange(changedTrip, day);
       }
-      //TODO: Routes
+      setRoutes([]);
+      const pois = getPOIsOfDay(day, trip);
+      if (pois.length >= 2) {
+        const changedRoutes = await NavigationService.search(pois);
+        setRoutes(changedRoutes);
+        const changedDay = updateRouteOfDay(changedRoutes[0], day);
+        const changedTrip = updateDayOfTrip(changedDay, trip);
+        if (onChange) {
+          onChange(changedTrip, day);
+        }
+      }
     },
     [onChange, trip],
   );
@@ -64,10 +91,20 @@ export const TripDetailView = ({
                   onChange={handleActivitiesChanged}
                 />
               </section>
-              <section>
-                <h3>路线</h3>
-                <RouteListView />
-              </section>
+              {routes.length > 0 && (
+                <section>
+                  <h3>路线</h3>
+                  <RouteListView
+                    routes={
+                      routes.length
+                        ? routes
+                        : selectedDay.route
+                        ? [selectedDay.route]
+                        : []
+                    }
+                  />
+                </section>
+              )}
             </>
           )}
         </main>
