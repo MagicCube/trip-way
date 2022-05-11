@@ -1,21 +1,13 @@
 import { memo, useEffect, useRef, useState } from 'react';
 
 import { MapContext } from './context';
-import type { MarkerProps } from './Marker';
-import type { PolylineProps } from './Polyline';
 
 export * from './Marker';
 export * from './Polyline';
 
-type MapElement =
-  | React.ReactElement<MarkerProps>
-  | React.ReactElement<PolylineProps>;
-
-type MapElementAsChild = null | MapElement | MapElement[];
-
 export interface MapViewProps {
   className?: string;
-  children?: MapElementAsChild | MapElementAsChild[];
+  children?: any;
 }
 
 export const MapView = memo(({ className, children }: MapViewProps) => {

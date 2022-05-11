@@ -4,9 +4,10 @@ import { MapContext } from './context';
 
 export interface MarkerProps {
   location: AMap.LngLatLike;
+  autoZoom?: boolean;
 }
 
-export const Marker = memo(({ location }: MarkerProps) => {
+export const Marker = memo(({ location, autoZoom }: MarkerProps) => {
   const ref = useRef<AMap.Marker | undefined>();
   const map = useContext(MapContext);
   useEffect(() => {
@@ -17,13 +18,17 @@ export const Marker = memo(({ location }: MarkerProps) => {
       } else {
         ref.current.setPosition(location as AMap.Vector2);
       }
+      if (autoZoom) {
+        map.setCenter(location);
+      }
     }
     return () => {
       if (map && ref.current) {
         map.remove(ref.current);
+        ref.current = undefined;
       }
     };
-  }, [location, map]);
+  }, [autoZoom, location, map]);
   return null;
 });
 Marker.displayName = 'Marker';
