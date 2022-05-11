@@ -129,7 +129,7 @@ export const TripDayListItem = memo(
           ) : (
             <>
               <div className={styles.left}>
-                <div className={cn(styles.displayName, styles.all)}>
+                <div className={cn(styles.displayName, styles.general)}>
                   全程概览
                 </div>
               </div>
