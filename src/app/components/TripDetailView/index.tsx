@@ -1,8 +1,7 @@
 import cn from 'classnames';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { getPOIsOfDay, updateDayOfTrip, updateRouteOfDay } from '@/core/biz';
-import { NavigationService } from '@/core/geo';
+import { updateDayOfTrip } from '@/core/biz';
 import type { DriveRoute, Trip, TripDay } from '@/core/types';
 
 import { ActivitiesEditor } from '../ActivitiesEditor';
@@ -51,17 +50,6 @@ export const TripDetailView = ({
       const changedTrip = updateDayOfTrip(day, trip);
       if (onChange) {
         onChange(changedTrip, day);
-      }
-      setRoutes([]);
-      const pois = getPOIsOfDay(day, trip);
-      if (pois.length >= 2) {
-        const changedRoutes = await NavigationService.search(pois);
-        setRoutes(changedRoutes);
-        const changedDay = updateRouteOfDay(changedRoutes[0], day);
-        const changedTrip = updateDayOfTrip(changedDay, trip);
-        if (onChange) {
-          onChange(changedTrip, day);
-        }
       }
     },
     [onChange, trip],

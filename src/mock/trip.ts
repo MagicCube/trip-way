@@ -1,7 +1,7 @@
 import type { Trip } from '@/core/types';
 
 export const MOCKED_TRIP: Trip = {
-  id: '0',
+  id: 'MOCK_9b145ee8',
   title: '川藏线大环线',
   description: '6月2日南京出发，10天9晚。',
   coverImageURL:
