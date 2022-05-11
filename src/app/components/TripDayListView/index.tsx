@@ -99,7 +99,14 @@ export const TripDayListItem = memo(
                       </div>
                     )}
                     {day.route.time > 0 && (
-                      <div className={styles.duration}>
+                      <div
+                        className={cn(
+                          styles.duration,
+                          day.route.time > 8 * 60 * 60
+                            ? styles.warning
+                            : undefined,
+                        )}
+                      >
                         {formatDuration(day.route.time, 'short')}
                       </div>
                     )}
