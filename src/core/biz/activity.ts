@@ -6,7 +6,14 @@ import { getDayIndex } from './trip-day';
 
 export function getLastActivityOfDay(day: TripDay, trip: Trip) {
   if (day.activities.length > 0) {
-    return day.activities[day.activities.length - 1];
+    let lastActivity: Activity | undefined = undefined;
+    for (let i = day.activities.length - 1; i >= 0; i--) {
+      lastActivity = day.activities[i];
+      if (lastActivity.poi) {
+        break;
+      }
+    }
+    return lastActivity || null;
   } else {
     return getLastActivityOfPreviousDay(day, trip);
   }
