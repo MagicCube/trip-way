@@ -84,7 +84,6 @@ export const TripDayListItem = memo(
               </div>
               <div className={styles.right}>
                 <div className={styles.date}>{dayDisplayName}</div>
-                <div>300km，7.5h</div>
               </div>
             </>
           ) : (
@@ -92,9 +91,7 @@ export const TripDayListItem = memo(
               <div className={styles.left}>
                 <div className={styles.desc}>全程概览</div>
               </div>
-              <div className={styles.right}>
-                <div>300km，7.5h</div>
-              </div>
+              <div className={styles.right}></div>
             </>
           )}
         </div>
