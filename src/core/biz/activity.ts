@@ -38,7 +38,7 @@ export function updatePOIOfActivity(
     if (poi) {
       draft.poi = poi;
     } else {
-      delete draft.poi;
+      draft.poi = null;
     }
   });
 }
