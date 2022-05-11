@@ -4,15 +4,16 @@ import { getActivitiesOfDay } from '../biz';
 import type { Activity, DetailedPOI, Trip, TripDay } from '../types';
 
 export function formatDistance(distanceInMeter: number) {
-  return `${(distanceInMeter / 1000).toFixed(0)}公里`;
+  return `${(distanceInMeter / 1000).toFixed(0)} 公里`;
 }
 
 export function formatDuration(durationInSeconds: number) {
   const duration = moment.duration(durationInSeconds * 1000);
   const hours = duration.days() * 24 + duration.hours();
   const minutes = duration.minutes();
-  console.info(hours, minutes);
-  return `${hours > 0 ? `${hours}时` : ''}${minutes > 0 ? `${minutes}分` : ''}`;
+  return `${hours > 0 ? `${hours} 小时` : ''}${
+    minutes > 0 ? ` ${minutes} 分钟` : ''
+  }`;
 }
 
 export function formatAdministrativeArea(name: string) {
