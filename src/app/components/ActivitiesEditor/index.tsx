@@ -123,6 +123,7 @@ export const ActivitiesEditor = ({
                               <ActivityEditor
                                 activity={activity}
                                 autoFocus={activity.poi === undefined}
+                                allowRemove={day.activities.length > 1}
                                 onChange={handleActivityChange}
                                 onRemove={handleActivityRemove}
                               />
