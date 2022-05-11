@@ -3,8 +3,10 @@ import immer from 'immer';
 import type { TripDay, Trip, Activity, DriveRoute } from '../types';
 import { uuid } from '../util/uuid';
 
-export function getDayIndex(day: TripDay, trip: Trip) {
-  return trip.days.findIndex((d) => d.id === day.id);
+export function getDayIndex(day: TripDay | string, trip: Trip) {
+  return trip.days.findIndex(
+    (d) => d.id === (typeof day === 'string' ? day : day.id),
+  );
 }
 
 export function updateActivityOfDay(activity: Activity, day: TripDay) {

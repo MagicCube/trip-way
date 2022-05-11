@@ -3,8 +3,10 @@ import { useParams } from 'react-router-dom';
 import { MapView, Marker, Polyline } from '@/app/components/MapView';
 import { TripDetailView } from '@/app/components/TripDetailView';
 import {
+  appendNewDayToTrip,
   combinePathOfRoute,
   getPOIsOfDay,
+  removeDayFromTrip,
   updateRoutesBasedOnChanges,
 } from '@/core/biz';
 import { loadTrip, saveTrip } from '@/core/storage';
@@ -58,19 +60,41 @@ export const TripDetailPage = () => {
     },
     [trip],
   );
+  const handleAppendDay = useCallback(async () => {
+    if (!trip) return;
+    const changedTrip = appendNewDayToTrip(trip);
+    const newDayId = changedTrip.days[changedTrip.days.length - 1].id;
+    replaceTripWith(changedTrip); // don't wait for saving
+    setTimeout(() => {
+      setSelectedDayId(newDayId);
+    }, 0);
+  }, [trip]);
+  const handleRemoveDay = useCallback(
+    async (dayId: string) => {
+      if (!trip) return;
+      const originalIndex = trip.days.findIndex((day) => day.id === dayId);
+      const changedTrip = removeDayFromTrip(dayId, trip);
+      await replaceTripWith(changedTrip);
+      if (changedTrip.days[originalIndex]) {
+        setSelectedDayId(changedTrip.days[originalIndex].id);
+      } else if (changedTrip.days[originalIndex - 1]) {
+        setSelectedDayId(changedTrip.days[originalIndex - 1].id);
+      } else {
+        setSelectedDayId(null);
+      }
+    },
+    [trip],
+  );
   const handleTripChange = useCallback(
     async (changedTrip: Trip, changedDay: TripDay | null) => {
       if (!trip) return;
-      setTrip(changedTrip);
-      await saveTrip(changedTrip);
+      await replaceTripWith(changedTrip);
       if (changedDay) {
         await updateRoutesBasedOnChanges(
           changedDay,
           changedTrip,
           async (newlyChangedTrip) => {
-            console.info('newlyChangedTrip', newlyChangedTrip);
-            setTrip(newlyChangedTrip);
-            await saveTrip(newlyChangedTrip);
+            await replaceTripWith(newlyChangedTrip);
           },
         );
       }
@@ -80,6 +104,11 @@ export const TripDetailPage = () => {
   if (!trip) {
     return null;
   }
+  const replaceTripWith = async (newTrip: Trip) => {
+    setTrip(newTrip);
+    await saveTrip(newTrip);
+  };
+
   return (
     <div className={styles.container}>
       <MapView className={styles.map}>
@@ -98,7 +127,10 @@ export const TripDetailPage = () => {
       <TripDetailView
         className={styles.tripDetail}
         trip={trip}
+        selectedDayId={selectedDayId}
         onDaySelect={handleDaySelect}
+        onAppendDay={handleAppendDay}
+        onRemoveDay={handleRemoveDay}
         onChange={handleTripChange}
       />
     </div>

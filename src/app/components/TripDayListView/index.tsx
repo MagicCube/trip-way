@@ -1,3 +1,5 @@
+import { PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Tooltip } from 'antd';
 import cn from 'classnames';
 import { memo, useCallback, useMemo } from 'react';
 
@@ -12,6 +14,7 @@ export interface TripDayListViewProps {
   trip: Trip;
   selection: string | null;
   onSelect: (dayId: string | null) => void;
+  onAppendDay?: () => void;
 }
 
 export const TripDayListView = memo(
@@ -20,6 +23,7 @@ export const TripDayListView = memo(
     trip,
     selection,
     onSelect: onChange,
+    onAppendDay,
   }: TripDayListViewProps) => {
     const handleDayClick = useCallback(
       (day: TripDay | null) => {
@@ -35,6 +39,7 @@ export const TripDayListView = memo(
           trip={trip}
           active={selection === null}
           onClick={handleDayClick}
+          onAppendDay={onAppendDay}
         />
         {trip.days.map((day, dayIndex) => (
           <TripDayListItem
@@ -59,12 +64,14 @@ export const TripDayListItem = memo(
     trip,
     active,
     onClick,
+    onAppendDay,
   }: {
     day: TripDay | null;
     dayIndex?: number;
     trip: Trip;
     active: boolean;
     onClick: (day: TripDay | null) => void;
+    onAppendDay?: () => void;
   }) => {
     const dayDisplayName = useMemo(
       () => moment(trip.startDate).add(dayIndex, 'days').format('M月D日 ddd'),
@@ -109,7 +116,15 @@ export const TripDayListItem = memo(
                   全程概览
                 </div>
               </div>
-              <div className={styles.right}></div>
+              <div className={styles.right}>
+                <Tooltip title="添加新日程">
+                  <Button
+                    type="link"
+                    icon={<PlusCircleOutlined />}
+                    onClick={onAppendDay}
+                  />
+                </Tooltip>
+              </div>
             </>
           )}
         </div>

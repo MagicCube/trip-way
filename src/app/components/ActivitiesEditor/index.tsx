@@ -46,7 +46,7 @@ export const ActivitiesEditor = ({
     [day, onChange],
   );
 
-  const handleActivityAppend = useCallback(() => {
+  const handleAppendActivity = useCallback(() => {
     const changedDay = appendNewActivityToDay(day);
     if (onChange) {
       onChange(changedDay);
@@ -141,11 +141,11 @@ export const ActivitiesEditor = ({
         </DragDropContext>
       </ul>
       {!reachActivitiesLimit && (
-        <div className={styles.appendItem}>
+        <div className={styles.buttons}>
           <Button
             type="link"
             icon={<PlusCircleOutlined />}
-            onClick={handleActivityAppend}
+            onClick={handleAppendActivity}
           >
             添加目的地
           </Button>
