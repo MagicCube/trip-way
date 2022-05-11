@@ -26,14 +26,20 @@ export const TripDetailPage = () => {
     return trip.days.find((day) => day.id === selectedDayId);
   }, [selectedDayId, trip]);
   const pois = useMemo(() => {
-    if (trip && selectedDay) {
+    if (!trip) {
+      return null;
+    }
+    if (selectedDay) {
       return getPOIsOfDay(selectedDay, trip);
     } else {
       return [];
     }
   }, [selectedDay, trip]);
   const routePath = useMemo(() => {
-    if (trip && selectedDay?.route) {
+    if (!trip) {
+      return null;
+    }
+    if (selectedDay?.route) {
       return combinePathOfRoute(selectedDay.route);
     }
     return null;
