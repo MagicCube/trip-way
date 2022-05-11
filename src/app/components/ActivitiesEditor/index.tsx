@@ -7,7 +7,6 @@ import { useCallback, useMemo } from 'react';
 
 import {
   appendNewActivityToDay,
-  getDayIndex,
   getLastActivityOfPreviousDay,
   removeActivityFromDay,
   reorderActivitiesOfDay as reorderActivitiesOfDay,
@@ -32,7 +31,6 @@ export const ActivitiesEditor = ({
   trip,
   onChange,
 }: ActivitiesEditorProps) => {
-  const dayIndex = useMemo(() => getDayIndex(day, trip), [day, trip]);
   const lastActivity = useMemo(
     () => getLastActivityOfPreviousDay(day, trip),
     [day, trip],
