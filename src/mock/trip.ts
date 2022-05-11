@@ -47,7 +47,6 @@ export const MOCKED_TRIP: Trip = {
           },
         },
       ],
-      routes: [],
     },
     {
       id: 'e7107798-4591-4a45-9c86-d8a68db99689',
@@ -56,7 +55,6 @@ export const MOCKED_TRIP: Trip = {
           id: '3467a04a-606a-40f0-88f2-5029ec7ec5e4',
         },
       ],
-      routes: [],
     },
   ],
 };
