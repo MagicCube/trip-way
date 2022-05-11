@@ -3,14 +3,29 @@ import moment from 'moment';
 import { getActivitiesOfDay } from '../biz';
 import type { Activity, DetailedPOI, Trip, TripDay } from '../types';
 
-export function formatDistance(distanceInMeter: number) {
-  return `${(distanceInMeter / 1000).toFixed(0)} 公里`;
+export function formatDistance(
+  distanceInMeter: number,
+  mode?: 'normal' | 'short',
+) {
+  if (mode === 'short') {
+    return `${(distanceInMeter / 1000).toFixed(0)} 公里`;
+  }
+  return `${(distanceInMeter / 1000).toFixed(1)} 公里`;
 }
 
-export function formatDuration(durationInSeconds: number) {
+export function formatDuration(
+  durationInSeconds: number,
+  mode?: 'normal' | 'short',
+) {
   const duration = moment.duration(durationInSeconds * 1000);
   const hours = duration.days() * 24 + duration.hours();
   const minutes = duration.minutes();
+  if (mode === 'short') {
+    if (hours < 1) {
+      return `${minutes} 分钟`;
+    }
+    return `${duration.asHours().toFixed(1)} 小时`;
+  }
   return `${hours > 0 ? `${hours} 小时` : ''}${
     minutes > 0 ? ` ${minutes} 分钟` : ''
   }`;
