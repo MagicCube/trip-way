@@ -1,21 +1,37 @@
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
+
+import { MapContext } from './context';
+import type { MarkerProps } from './Marker';
+import type { PolylineProps } from './Polyline';
+
+export * from './Marker';
+export * from './Polyline';
+
+type MapElement =
+  | React.ReactElement<MarkerProps>
+  | React.ReactElement<PolylineProps>;
+
+type MapElementAsChild = null | MapElement | MapElement[];
 
 export interface MapViewProps {
   className?: string;
+  children?: MapElementAsChild | MapElementAsChild[];
 }
 
-export const MapView = memo(({ className }: MapViewProps) => {
-  const mapRef = useRef<AMap.Map>();
+export const MapView = memo(({ className, children }: MapViewProps) => {
+  const [map, setMap] = useState<AMap.Map | undefined>();
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!mapRef.current && containerRef.current) {
-      // mapRef.current = new AMap.Map(containerRef.current, {
-      //   zoom: 11, //级别
-      //   center: [116.397428, 39.90923], //中心点坐标
-      //   viewMode: '3D', //使用3D视图
-      // });
+    if (!map && containerRef.current) {
+      setMap(new AMap.Map(containerRef.current));
     }
-  }, []);
-  return <div ref={containerRef} className={className}></div>;
+  }, [map]);
+  return (
+    <MapContext.Provider value={map}>
+      <div ref={containerRef} className={className}>
+        {children}
+      </div>
+    </MapContext.Provider>
+  );
 });
 MapView.displayName = 'MapView';
