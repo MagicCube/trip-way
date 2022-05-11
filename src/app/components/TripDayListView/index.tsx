@@ -51,6 +51,17 @@ export const TripDayListView = memo(
             onClick={handleDayClick}
           />
         ))}
+        <li className={styles.newItem}>
+          <Button
+            type="link"
+            icon={
+              <PlusCircleOutlined style={{ marginLeft: 2, marginRight: 6 }} />
+            }
+            onClick={onAppendDay}
+          >
+            添加下一日行程
+          </Button>
+        </li>
       </ul>
     );
   },
@@ -123,15 +134,7 @@ export const TripDayListItem = memo(
                   全程概览
                 </div>
               </div>
-              <div className={styles.right}>
-                <Tooltip title="添加新日程">
-                  <Button
-                    type="link"
-                    icon={<PlusCircleOutlined />}
-                    onClick={onAppendDay}
-                  />
-                </Tooltip>
-              </div>
+              <div className={styles.right}></div>
             </>
           )}
         </div>
