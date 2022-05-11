@@ -16,7 +16,14 @@ export function getLastActivityOfPreviousDay(day: TripDay, trip: Trip) {
   const dayIndex = getDayIndex(day, trip);
   if (dayIndex >= 1) {
     const previousDay = trip.days[dayIndex - 1];
-    return previousDay.activities[previousDay.activities.length - 1] || null;
+    let previousActivity: Activity | undefined = undefined;
+    for (let i = previousDay.activities.length - 1; i >= 0; i--) {
+      previousActivity = previousDay.activities[i];
+      if (previousActivity.poi) {
+        break;
+      }
+    }
+    return previousActivity || null;
   }
   return null;
 }
