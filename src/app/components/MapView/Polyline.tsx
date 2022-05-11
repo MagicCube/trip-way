@@ -16,7 +16,7 @@ export const Polyline = ({ path }: PolylineProps) => {
         ref.current = new AMap.Polyline({
           path,
           strokeWeight: 6,
-          strokeColor: 'blue',
+          strokeColor: '#6a9f61',
           lineJoin: 'round',
         });
         map.add(ref.current);
