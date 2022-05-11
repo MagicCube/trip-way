@@ -11,7 +11,6 @@ export const Polyline = ({ path }: PolylineProps) => {
   const map = useContext(MapContext);
   useEffect(() => {
     if (map) {
-      console.info(path);
       if (!ref.current) {
         ref.current = new AMap.Polyline({
           path,
