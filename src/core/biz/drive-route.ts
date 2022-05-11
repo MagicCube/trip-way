@@ -64,3 +64,22 @@ export function combinePathOfRoute(route: DriveRoute) {
   });
   return path;
 }
+
+export function combinePathOfTrip(trip: Trip) {
+  const path: AMap.LngLat[] = [];
+  trip.days.forEach((day) => {
+    if (day.route) {
+      path.push(...combinePathOfRoute(day.route));
+    }
+  });
+  return path;
+}
+
+export function sumTripDistance(trip: Trip) {
+  return trip.days.reduce((acc, day) => {
+    if (day.route) {
+      return acc + day.route.distance;
+    }
+    return acc;
+  }, 0);
+}
