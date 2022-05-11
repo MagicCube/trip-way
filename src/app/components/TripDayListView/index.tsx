@@ -3,6 +3,7 @@ import { Button } from 'antd';
 import cn from 'classnames';
 import { memo, useCallback, useMemo } from 'react';
 
+import { sumTripDistance } from '@/core/biz';
 import type { Trip, TripDay } from '@/core/types';
 import { formatDay, formatDistance, formatDuration } from '@/core/util/format';
 
@@ -122,7 +123,10 @@ export const TripDayListItem = memo(
                     )}
                   </div>
                 ) : (
-                  <div className={styles.routeInfo}>暂无行程</div>
+                  <div className={styles.routeInfo}>
+                    <div className={styles.distance}>0 公里</div>
+                    <div className={styles.duration}>0 分钟</div>
+                  </div>
                 )}
               </div>
             </>
@@ -133,7 +137,11 @@ export const TripDayListItem = memo(
                   全程概览
                 </div>
               </div>
-              <div className={styles.right}></div>
+              <div className={styles.right}>
+                <div className={styles.distance}>
+                  {formatDistance(sumTripDistance(trip), 'short')}
+                </div>
+              </div>
             </>
           )}
         </div>

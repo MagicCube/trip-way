@@ -5,6 +5,8 @@ import { TripDetailView } from '@/app/components/TripDetailView';
 import {
   appendNewDayToTrip,
   combinePathOfRoute,
+  combinePathOfTrip,
+  getDailyPOIsOfTrip,
   getPOIsOfDay,
   removeDayFromTrip,
   updateRoutesBasedOnChanges,
@@ -27,12 +29,12 @@ export const TripDetailPage = () => {
   }, [selectedDayId, trip]);
   const pois = useMemo(() => {
     if (!trip) {
-      return null;
+      return [];
     }
     if (selectedDay) {
       return getPOIsOfDay(selectedDay, trip);
     } else {
-      return [];
+      return getDailyPOIsOfTrip(trip);
     }
   }, [selectedDay, trip]);
   const routePath = useMemo(() => {
@@ -41,8 +43,9 @@ export const TripDetailPage = () => {
     }
     if (selectedDay?.route) {
       return combinePathOfRoute(selectedDay.route);
+    } else {
+      return combinePathOfTrip(trip);
     }
-    return null;
   }, [selectedDay?.route, trip]);
   useEffect(() => {
     if (params.tripId) {
