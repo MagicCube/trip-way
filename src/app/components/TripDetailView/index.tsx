@@ -105,7 +105,6 @@ export const TripDetailView = ({
                     danger
                     block
                     size="large"
-                    type="primary"
                     shape="round"
                     onClick={() => {
                       if (onRemoveDay) {
