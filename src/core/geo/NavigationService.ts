@@ -52,7 +52,7 @@ export class NavigationServiceImpl {
     ) => {
       if (status === 'complete' && typeof result === 'object') {
         result.routes.forEach((route) => {
-          route.id = `[${poiIds.join(',')}]-[${route.policy}]`;
+          route.id = poiIds.join(',');
         });
         resolve(result.routes);
       } else if (status === 'no_data') {
