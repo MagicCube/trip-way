@@ -20,7 +20,11 @@ export class NavigationServiceImpl {
         resolve: (routes: DriveRoute[]) => void,
         reject: (error: Error) => void,
       ) => {
-        const callback = this._createDrivingCallback(resolve, reject);
+        const callback = this._createDrivingCallback(
+          pois.map((poi) => poi.id),
+          resolve,
+          reject,
+        );
         if (points.length === 2) {
           this.internal.search(points[0], points[1], callback);
         } else {
@@ -38,6 +42,7 @@ export class NavigationServiceImpl {
   }
 
   private _createDrivingCallback(
+    poiIds: string[],
     resolve: (routes: DriveRoute[]) => void,
     reject: (error: Error) => void,
   ) {
@@ -46,6 +51,9 @@ export class NavigationServiceImpl {
       result: AMap.DrivingResult | string,
     ) => {
       if (status === 'complete' && typeof result === 'object') {
+        result.routes.forEach((route) => {
+          route.id = `[${poiIds.join(',')}]-[${route.policy}]`;
+        });
         resolve(result.routes);
       } else if (status === 'no_data') {
         resolve([]);
