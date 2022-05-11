@@ -1,5 +1,7 @@
 import '@amap/amap-jsapi-types';
 
+import type { POI, DriveRoute } from '../core/types';
+
 declare global {
   namespace AMap {
     type CallbackStatus = 'complete' | 'error' | 'no_data';
