@@ -81,7 +81,7 @@ export const TripDetailView = ({
               </section>
               {routes.length > 0 && (
                 <section>
-                  <h3>路线</h3>
+                  <h3>行程</h3>
                   <RouteListView
                     routes={
                       routes.length
