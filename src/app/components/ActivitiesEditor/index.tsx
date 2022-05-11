@@ -147,7 +147,7 @@ export const ActivitiesEditor = ({
             icon={<PlusCircleOutlined />}
             onClick={handleAppendActivity}
           >
-            添加目的地
+            添加新目的地
           </Button>
         </div>
       )}
