@@ -16,7 +16,13 @@ import styles from './index.module.less';
 export const TripDetailPage = () => {
   const params = useParams<{ tripId: string }>();
   const [trip, setTrip] = useState<Trip | null>(null);
-  const [selectedDay, setSelectedDay] = useState<TripDay | null>(null);
+  const [selectedDayId, setSelectedDayId] = useState<string | null>(null);
+  const selectedDay = useMemo(() => {
+    if (!trip) {
+      return null;
+    }
+    return trip.days.find((day) => day.id === selectedDayId);
+  }, [selectedDayId, trip]);
   const pois = useMemo(() => {
     if (trip && selectedDay) {
       return getPOIsOfDay(selectedDay, trip);
@@ -48,11 +54,7 @@ export const TripDetailPage = () => {
   const handleDaySelect = useCallback(
     (dayId: string | null) => {
       if (!trip) return;
-      const day =
-        dayId !== null ? trip.days.find((day) => day.id === dayId) : undefined;
-      if (day) {
-        setSelectedDay(day);
-      }
+      setSelectedDayId(dayId);
     },
     [trip],
   );
@@ -66,6 +68,7 @@ export const TripDetailPage = () => {
           changedDay,
           changedTrip,
           async (newlyChangedTrip) => {
+            console.info('newlyChangedTrip', newlyChangedTrip);
             setTrip(newlyChangedTrip);
             await saveTrip(newlyChangedTrip);
           },
@@ -80,9 +83,10 @@ export const TripDetailPage = () => {
   return (
     <div className={styles.container}>
       <MapView className={styles.map}>
-        {pois.map((poi) => (
+        {pois.map((poi, i) => (
           <Marker
             key={poi.id}
+            title={`${i + 1}.${poi.name}`}
             location={poi.location}
             autoZoom={pois.length === 1}
           />

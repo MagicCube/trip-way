@@ -48,7 +48,7 @@ export async function updateRoutesBasedOnChanges(
       });
       await callback(changedTrip);
       await updateRoutesBasedOnChanges(
-        possiblyImpactDay,
+        changedTrip.days[possiblyImpactDayIndex],
         changedTrip,
         callback,
       );

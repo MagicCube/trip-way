@@ -35,7 +35,7 @@ export const TripDetailView = ({
     } else {
       setRoutes([]);
     }
-  }, [selectedDayId, trip.days]);
+  }, [selectedDayId, trip]);
   const handleDaySelect = useCallback(
     (dayId: string | null) => {
       setSelectedDayId(dayId);
