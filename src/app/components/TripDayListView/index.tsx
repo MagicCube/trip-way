@@ -2,7 +2,7 @@ import cn from 'classnames';
 import { memo, useCallback, useMemo } from 'react';
 
 import type { Trip, TripDay } from '@/core/types';
-import { formatDay } from '@/core/util/format';
+import { formatDay, formatDistance, formatDuration } from '@/core/util/format';
 
 import styles from './index.module.less';
 import moment from 'moment';
@@ -78,18 +78,36 @@ export const TripDayListItem = memo(
         <div className={styles.itemContent}>
           {day !== null && dayIndex !== undefined ? (
             <>
+              <div className={styles.dayIndex}>D{dayIndex + 1}</div>
               <div className={styles.left}>
-                <div className={styles.dayIndex}>Day {dayIndex + 1}</div>
+                <div className={styles.day}>{dayDisplayName}</div>
                 <div className={styles.displayName}>{formatDay(day, trip)}</div>
               </div>
               <div className={styles.right}>
-                <div className={styles.date}>{dayDisplayName}</div>
+                {day.route ? (
+                  <div className={styles.routeInfo}>
+                    {day.route.distance > 0 && (
+                      <div className={styles.distance}>
+                        {formatDistance(day.route.distance, 'short')}
+                      </div>
+                    )}
+                    {day.route.time > 0 && (
+                      <div className={styles.duration}>
+                        {formatDuration(day.route.time, 'short')}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className={styles.routeInfo}>暂无行程</div>
+                )}
               </div>
             </>
           ) : (
             <>
               <div className={styles.left}>
-                <div className={styles.desc}>全程概览</div>
+                <div className={cn(styles.displayName, styles.all)}>
+                  全程概览
+                </div>
               </div>
               <div className={styles.right}></div>
             </>
