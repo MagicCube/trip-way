@@ -68,11 +68,6 @@ export const ActivitiesEditor = ({
   const handleDragEnd = useCallback(
     (result: DropResult) => {
       if (result.destination) {
-        console.info(
-          'handleDragEnd',
-          result.source.index,
-          result.destination.index,
-        );
         const changedDay = reorderActivitiesOfDay(
           result.source.index,
           result.destination.index,
