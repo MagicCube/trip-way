@@ -21,12 +21,12 @@ async function main() {
   const root = createRoot(document.querySelector('body > #tw-app-root')!);
   root.render(
     <ConfigProvider locale={antdLocale}>
-      <App />
+      <AppRouter />
     </ConfigProvider>,
   );
 }
 
-const App = () => {
+const AppRouter = () => {
   return (
     <div className="tw-app">
       <BrowserRouter>
