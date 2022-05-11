@@ -2,7 +2,7 @@ export interface POI {
   id: string;
   name: string;
   type: string;
-  location: AMap.LngLat;
+  location: AMap.LngLatLike;
   address: string;
   distance: number | null;
   tel: string;
