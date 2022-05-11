@@ -36,7 +36,14 @@ const RouteListViewItem = memo(
         <div className={styles.details}>
           <span>约 {formatDuration(route.time)}</span>
           <span>{formatDistance(route.distance)}</span>
-          <span>{route.tolls ? `收费 ${route.tolls} 元` : '免费'}</span>
+          <span
+            className={cn(
+              styles.toll,
+              route && route.tolls === 0 ? styles.freeOfCharge : undefined,
+            )}
+          >
+            {route.tolls ? `收费 ${route.tolls} 元` : '免费'}
+          </span>
         </div>
       </li>
     );
