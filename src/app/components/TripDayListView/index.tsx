@@ -1,5 +1,5 @@
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Tooltip } from 'antd';
+import { Button } from 'antd';
 import cn from 'classnames';
 import { memo, useCallback, useMemo } from 'react';
 
@@ -59,7 +59,7 @@ export const TripDayListView = memo(
             }
             onClick={onAppendDay}
           >
-            添加下一日行程
+            添加下一日程
           </Button>
         </li>
       </ul>
@@ -75,7 +75,6 @@ export const TripDayListItem = memo(
     trip,
     active,
     onClick,
-    onAppendDay,
   }: {
     day: TripDay | null;
     dayIndex?: number;
