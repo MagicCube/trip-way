@@ -58,7 +58,7 @@ export async function updateRoutesBasedOnChanges(
 }
 
 export function combinePathOfRoute(route: DriveRoute) {
-  const path: AMap.LngLat[] = [];
+  const path: AMap.Vector2[] = [];
   route.steps.forEach((step) => {
     path.push(...step.path);
   });
@@ -66,7 +66,7 @@ export function combinePathOfRoute(route: DriveRoute) {
 }
 
 export function combinePathOfTrip(trip: Trip) {
-  const path: AMap.LngLat[] = [];
+  const path: AMap.Vector2[] = [];
   trip.days.forEach((day) => {
     if (day.route) {
       path.push(...combinePathOfRoute(day.route));

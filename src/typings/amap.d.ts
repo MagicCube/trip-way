@@ -1,6 +1,6 @@
 import '@amap/amap-jsapi-types';
 
-import type { POI, DriveRoute } from '../core/types';
+import type { DriveRoute } from '../core/types';
 
 declare global {
   namespace AMap {
