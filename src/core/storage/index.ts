@@ -1,20 +1,14 @@
 import type { Trip } from '../types';
 
+import { TripWayDatabase } from './TripWayDatabase';
+
+const db = new TripWayDatabase();
+
 export async function saveTrip(trip: Trip) {
-  const key = getLocalStorageKeyOfTrip(trip.id);
-  localStorage.setItem(key, JSON.stringify(trip));
+  await db.trips.put(trip);
 }
 
 export async function loadTrip(id: string) {
-  const key = getLocalStorageKeyOfTrip(id);
-  const json = localStorage.getItem(key);
-  if (json) {
-    return JSON.parse(json) as Trip;
-  } else {
-    return null;
-  }
-}
-
-function getLocalStorageKeyOfTrip(id: string) {
-  return `trip-way://trips/${id}`;
+  const trip = await db.trips.get(id);
+  return trip || null;
 }
