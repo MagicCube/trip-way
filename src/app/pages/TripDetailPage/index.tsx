@@ -123,7 +123,7 @@ export const TripDetailPage = () => {
       <MapView className={styles.map}>
         {pois.map((poi, i) => (
           <Marker
-            key={`marker-${i}`}
+            key={poi.id}
             title={`${i + 1}.${poi.name}`}
             location={poi.location}
             autoZoom={pois.length === 1}

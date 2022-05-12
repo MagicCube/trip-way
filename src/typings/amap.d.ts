@@ -8,7 +8,7 @@ declare global {
     type Callback<T> = (status: CallbackStatus, result: T | string) => void;
 
     interface POIList {
-      pois: POI[];
+      pois: DetailedPOI[];
       pageIndex: number;
       pageSize: number;
       count: number;

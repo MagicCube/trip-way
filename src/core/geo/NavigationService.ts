@@ -1,4 +1,4 @@
-import type { DriveRoute, POI } from '../types';
+import type { DriveRoute, DriveStep, POI } from '../types';
 
 export class NavigationServiceImpl {
   private _internal: AMap.Driving | null = null;
@@ -54,7 +54,7 @@ export class NavigationServiceImpl {
         result.routes.forEach((route) => {
           route.id = poiIds.join(',');
         });
-        resolve(result.routes);
+        resolve(result.routes.map(extractRoute));
       } else if (status === 'no_data') {
         resolve([]);
       } else {
@@ -62,6 +62,44 @@ export class NavigationServiceImpl {
       }
     };
   }
+}
+
+function extractRoute(route: DriveRoute): DriveRoute {
+  return {
+    id: route.id,
+    policy: route.policy,
+    distance: route.distance,
+    time: route.time,
+    tolls: route.tolls,
+    steps: extractSteps(route),
+  };
+}
+
+function extractSteps(route: DriveRoute): DriveStep[] {
+  const results: DriveStep[] = [];
+  let currentStep: DriveStep | undefined;
+  route.steps.forEach((step) => {
+    if (currentStep === undefined || step.assistant_action === '到达途经地') {
+      currentStep = {
+        distance: step.distance,
+        time: step.time,
+        path: extractPath(step.path),
+      };
+      results.push(currentStep);
+    } else {
+      currentStep.distance += step.distance;
+      currentStep.time += step.time;
+      currentStep.path = currentStep.path.concat(extractPath(step.path));
+    }
+  });
+  return results;
+}
+
+function extractPath(path: AMap.LngLatLike[]): AMap.Vector2[] {
+  return path.map((lngLatLike: AMap.LngLatLike) => {
+    const l = lngLatLike as AMap.LngLat;
+    return [l.lng, l.lat];
+  });
 }
 
 export const NavigationService = new NavigationServiceImpl();

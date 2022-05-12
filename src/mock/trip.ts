@@ -19,17 +19,9 @@ export const MOCKED_TRIP: Trip = {
             type: '交通设施服务;机场相关;飞机场',
             location: [104.446504, 30.307995],
             address: '芦葭镇',
-            tel: '028-86906666',
-            distance: null,
-            website: '',
-            pcode: '510000',
-            citycode: '028',
-            adcode: '510185',
-            postcode: '',
             pname: '四川省',
             cityname: '成都市',
             adname: '简阳市',
-            email: '',
             photos: [
               {
                 title: '',

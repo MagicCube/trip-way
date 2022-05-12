@@ -10,5 +10,6 @@ export async function saveTrip(trip: Trip) {
 
 export async function loadTrip(id: string) {
   const trip = await db.trips.get(id);
+  console.info(trip);
   return trip || null;
 }

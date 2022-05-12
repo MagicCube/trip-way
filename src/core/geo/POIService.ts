@@ -1,4 +1,4 @@
-import type { DetailedPOI, POI } from '../types';
+import type { DetailedPOI } from '../types';
 
 const POI_TYPES = [
   '汽车服务',
@@ -77,8 +77,8 @@ class POIServiceImpl {
     }).then((pois) => (pois?.length ? pois[0] : null));
   }
 
-  private _createPlaceSearchCallback<P extends POI = POI>(
-    resolve: (pois: P[]) => void,
+  private _createPlaceSearchCallback(
+    resolve: (pois: DetailedPOI[]) => void,
     reject: (error: Error) => void,
   ) {
     return (
@@ -86,7 +86,7 @@ class POIServiceImpl {
       result: AMap.PlaceSearchResult | string,
     ) => {
       if (status === 'complete' && typeof result === 'object') {
-        resolve(result.poiList.pois as P[]);
+        resolve(result.poiList.pois.map(extractPOI));
       } else if (status === 'no_data') {
         resolve([]);
       } else {
@@ -94,6 +94,21 @@ class POIServiceImpl {
       }
     };
   }
+}
+
+function extractPOI(poi: DetailedPOI): DetailedPOI {
+  const l = poi.location as unknown as AMap.LngLat;
+  return {
+    id: poi.id,
+    name: poi.name,
+    type: poi.type,
+    location: [l.lng, l.lat],
+    address: poi.address,
+    pname: poi.pname,
+    cityname: poi.cityname,
+    adname: poi.adname,
+    photos: poi.photos,
+  };
 }
 
 export const POIService = new POIServiceImpl();

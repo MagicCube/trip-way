@@ -2,22 +2,14 @@ export interface POI {
   id: string;
   name: string;
   type: string;
-  location: AMap.LngLatLike;
+  location: AMap.Vector2;
   address: string;
-  distance: number | null;
-  tel: string;
 }
 
 export interface DetailedPOI extends POI {
-  website: string;
-  pcode: string;
-  citycode: string;
-  adcode: string;
-  postcode: string;
   pname: string;
   cityname: string;
   adname: string;
-  email: string;
   photos: Photo[] | '';
 }
 
