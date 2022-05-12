@@ -1,4 +1,8 @@
-import { HolderOutlined, MinusCircleFilled } from '@ant-design/icons';
+import {
+  HolderOutlined,
+  MinusCircleFilled,
+  PlusCircleFilled,
+} from '@ant-design/icons';
 import cn from 'classnames';
 import { memo, useCallback, useState } from 'react';
 
@@ -15,9 +19,11 @@ export interface ActivityEditorProps {
   activity: Activity;
   readonly?: boolean;
   autoFocus?: boolean;
-  allowReorder?: boolean;
+  allowInsertBefore?: boolean;
   allowRemove?: boolean;
+  allowReorder?: boolean;
   onChange?: (activity: Activity) => void;
+  onInsertBefore?: (activityId: string) => void;
   onRemove?: (activityId: string) => void;
 }
 
@@ -29,9 +35,11 @@ export const ActivityEditor = memo(
     activity,
     readonly,
     autoFocus,
-    allowReorder,
+    allowInsertBefore,
     allowRemove,
+    allowReorder,
     onChange,
+    onInsertBefore,
     onRemove,
   }: ActivityEditorProps) => {
     const [dragTooltipVisible, setDragTooltipVisible] = useState(
@@ -46,6 +54,11 @@ export const ActivityEditor = memo(
       },
       [activity, onChange],
     );
+    const handleInsertBefore = useCallback(() => {
+      if (onInsertBefore) {
+        onInsertBefore(activity.id);
+      }
+    }, [activity.id, onInsertBefore]);
     const handleRemove = useCallback(() => {
       if (onRemove) {
         onRemove(activity.id);
@@ -95,6 +108,16 @@ export const ActivityEditor = memo(
                 className={styles.removeButton}
                 onClick={handleRemove}
               />
+            </Tooltip>
+          )}
+          {allowInsertBefore !== false && (
+            <Tooltip title="插入目的地">
+              <div
+                className={cn(styles.insertButton, styles.before)}
+                onClick={handleInsertBefore}
+              >
+                <PlusCircleFilled />
+              </div>
             </Tooltip>
           )}
         </div>

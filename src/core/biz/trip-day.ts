@@ -24,6 +24,16 @@ export function updateRouteOfDay(route: DriveRoute | null, day: TripDay) {
   });
 }
 
+export function insertNewActivityToDay(activityId: string, day: TripDay) {
+  return immer(day, (draft) => {
+    const activityIndex = day.activities.findIndex((a) => a.id === activityId);
+    const newActivity: Activity = { id: uuid() };
+    if (activityIndex >= 0) {
+      draft.activities.splice(activityIndex, 0, newActivity);
+    }
+  });
+}
+
 export function appendNewActivityToDay(day: TripDay) {
   return immer(day, (draft) => {
     const newActivity: Activity = { id: uuid() };

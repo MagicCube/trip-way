@@ -86,7 +86,6 @@ export const POIInput = memo(
         autoFocus={autoFocus}
         disabled={disabled}
         size="large"
-        allowClear
         showSearch
         showArrow={false}
         filterOption={false}

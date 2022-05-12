@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  position: relative;
   width: 100%;
   min-width: 1px;
 }
@@ -37,6 +38,37 @@
 
 .container:hover .handlebar {
   opacity: 1;
+}
+
+.insertButton {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  right: 23px;
+  color: var(--text-color-secondary);
+  font-size: 1.25em;
+  cursor: pointer;
+}
+
+.insertButton :global(.anticon) {
+  background: white;
+  border-radius: 50%;
+  opacity: 0.66;
+}
+
+.insertButton :global(.anticon):hover {
+  opacity: 1;
+}
+
+.insertButton.before {
+  top: -22px;
+}
+
+.container:hover .insertButton {
+  display: flex;
 }
 
 .removeButton:global(.anticon) {

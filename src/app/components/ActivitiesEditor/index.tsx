@@ -8,6 +8,7 @@ import { useCallback, useMemo } from 'react';
 import {
   appendNewActivityToDay,
   getLastActivityOfPreviousDay,
+  insertNewActivityToDay,
   removeActivityFromDay,
   reorderActivitiesOfDay as reorderActivitiesOfDay,
   updateActivityOfDay,
@@ -53,6 +54,16 @@ export const ActivitiesEditor = ({
     }
   }, [day, onChange]);
 
+  const handleInsertBefore = useCallback(
+    (activityId: string) => {
+      const changedDay = insertNewActivityToDay(activityId, day);
+      if (onChange) {
+        onChange(changedDay);
+      }
+    },
+    [day, onChange],
+  );
+
   const handleActivityRemove = useCallback(
     (activityId: string) => {
       const changedDay = removeActivityFromDay(activityId, day);
@@ -92,7 +103,9 @@ export const ActivitiesEditor = ({
               readonly
               allowReorder={false}
               allowRemove={false}
+              allowInsertBefore={false}
               onChange={handleActivityChange}
+              onInsertBefore={handleInsertBefore}
               onRemove={handleActivityRemove}
             />
           </li>
@@ -125,6 +138,7 @@ export const ActivitiesEditor = ({
                                 autoFocus={activity.poi === undefined}
                                 allowRemove={day.activities.length > 1}
                                 onChange={handleActivityChange}
+                                onInsertBefore={handleInsertBefore}
                                 onRemove={handleActivityRemove}
                               />
                             </li>
