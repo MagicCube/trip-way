@@ -6,7 +6,7 @@ export const MOCKED_TRIP: Trip = {
   description: '6月2日南京出发，10天9晚。',
   coverImageURL:
     'https://drscdn.500px.org/photo/1047855817/q%3D80_m%3D1500/v2?sig=2d12add739182d0c1a7dc94050f1e1c35799b7ff773ad16cbcfdd9f246a105a7',
-  startDate: '2022-06-02',
+  departureDate: '2022-06-02',
   days: [
     {
       id: 'c46d01d2-553a-4121-a0f7-8de33b949995',

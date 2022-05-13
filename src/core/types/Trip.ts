@@ -5,6 +5,6 @@ export interface Trip {
   title: string;
   description?: string;
   coverImageURL: string;
-  startDate: string;
+  departureDate: string;
   days: TripDay[];
 }

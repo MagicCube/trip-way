@@ -1,4 +1,4 @@
-import { getActivitiesOfDay, getPOIsOfDay } from '@/core/biz';
+import { getPOIsOfDay } from '@/core/biz';
 import type { DetailedPOI, DriveRoute, Trip, TripDay } from '@/core/types';
 import { formatDistance, formatDuration } from '@/core/util/format';
 import { Timeline } from 'antd';

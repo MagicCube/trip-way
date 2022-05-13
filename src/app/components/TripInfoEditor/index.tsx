@@ -17,7 +17,11 @@ export interface TripInfoEditorProps {
 export const TripInfoEditor = memo<TripInfoEditorProps>(
   ({ className, trip, onChange }) => {
     const handleSave = useCallback(
-      (changes: { title: string; description: string; startDate: string }) => {
+      (changes: {
+        title: string;
+        description: string;
+        departureDate: string;
+      }) => {
         const changedTrip = updateTripInfo(changes, trip);
         if (onChange) {
           onChange(changedTrip);
@@ -41,21 +45,16 @@ export const TripInfoEditor = memo<TripInfoEditorProps>(
                 name="title"
                 rules={[{ required: true, message: '标题不能为空' }]}
               >
-                <Input
-                  size="large"
-                  placeholder="示例：川藏大环线"
-                  value={trip.title}
-                />
+                <Input size="large" placeholder="示例：川藏大环线" />
               </Form.Item>
               <Form.Item label="描述" name="description">
                 <Input.TextArea
                   size="large"
                   placeholder="示例：6月1日出发，七天六晚，G318 进 G317 出"
-                  value={trip.description}
                 />
               </Form.Item>
-              <Form.Item label="出发日期" name="startDate">
-                <Input size="large" type="date" value={trip.startDate} />
+              <Form.Item label="出发日期" name="departureDate">
+                <Input size="large" type="date" />
               </Form.Item>
             </div>
           </section>

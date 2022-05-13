@@ -85,8 +85,9 @@ export const TripDayListItem = memo(
     onAppendDay?: () => void;
   }) => {
     const dayDisplayName = useMemo(
-      () => moment(trip.startDate).add(dayIndex, 'days').format('M月D日 ddd'),
-      [dayIndex, trip.startDate],
+      () =>
+        moment(trip.departureDate).add(dayIndex, 'days').format('M月D日 ddd'),
+      [dayIndex, trip.departureDate],
     );
     return (
       <li
