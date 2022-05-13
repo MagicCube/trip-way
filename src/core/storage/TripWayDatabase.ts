@@ -7,7 +7,7 @@ export class TripWayDatabase extends Dexie {
 
   constructor() {
     super('TripWayDatabase');
-    this.version(1).stores({
+    this.version(4).stores({
       trips: '++id',
     });
   }
