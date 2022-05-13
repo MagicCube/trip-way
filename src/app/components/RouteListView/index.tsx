@@ -74,7 +74,7 @@ const RouteListViewItem = memo(
               return (
                 <Timeline.Item
                   key={`step-${stepIndex}`}
-                  label={pois[stepIndex + 1].name}
+                  label={pois[stepIndex + 1]?.name}
                 >
                   <div className={styles.distance}>
                     {formatDistance(step.distance)}
