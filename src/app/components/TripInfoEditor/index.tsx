@@ -48,7 +48,7 @@ export const TripInfoEditor = memo<TripInfoEditorProps>(
                 />
               </Form.Item>
               <Form.Item label="描述" name="description">
-                <Input
+                <Input.TextArea
                   size="large"
                   placeholder="示例：6月1日出发，七天六晚，G318 进 G317 出"
                   value={trip.description}
