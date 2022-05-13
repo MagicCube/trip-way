@@ -28,6 +28,17 @@ export function removeDayFromTrip(dayId: string, trip: Trip) {
   });
 }
 
+export function updateTripInfo(
+  info: { title: string; description: string; startDate: string },
+  trip: Trip,
+) {
+  return immer(trip, (draft) => {
+    draft.title = info.title;
+    draft.description = info.description;
+    draft.startDate = info.startDate;
+  });
+}
+
 export function updateDayOfTrip(day: TripDay, trip: Trip) {
   return immer(trip, (draft) => {
     const dayIndex = getDayIndex(day, trip);
