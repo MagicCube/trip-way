@@ -46,3 +46,21 @@
     display: none;
   }
 }
+
+.timelineContainer {
+  margin-top: var(--padding-largest);
+  width: 75%;
+}
+
+.timeline {
+  :global {
+    .ant-timeline-item-label {
+      font-weight: bold;
+    }
+  }
+
+  .distance,
+  .duration {
+    color: var(--text-color-secondary);
+  }
+}

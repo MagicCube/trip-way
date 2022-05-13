@@ -1,9 +1,9 @@
 import { Button } from 'antd';
 import cn from 'classnames';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { getDayIndex, updateDayOfTrip } from '@/core/biz';
-import type { DriveRoute, Trip, TripDay } from '@/core/types';
+import type { Trip, TripDay } from '@/core/types';
 
 import { ActivitiesEditor } from '../ActivitiesEditor';
 import { RouteListView } from '../RouteListView';
@@ -31,17 +31,14 @@ export const TripDetailView = ({
   onAppendDay,
   onRemoveDay,
 }: TripDetailViewProps) => {
-  const [selectedDay, setSelectedDay] = useState<TripDay | null>(null);
-  const [routes, setRoutes] = useState<DriveRoute[]>([]);
-  useEffect(() => {
-    const d = trip.days.find((day) => day.id === selectedDayId) || null;
-    setSelectedDay(d);
-    if (d?.route) {
-      setRoutes([d.route]);
-    } else {
-      setRoutes([]);
-    }
-  }, [selectedDayId, trip]);
+  const selectedDay = useMemo(
+    () => trip.days.find((day) => day.id === selectedDayId) || null,
+    [selectedDayId, trip],
+  );
+  const routes = useMemo(
+    () => (selectedDay && selectedDay.route ? [selectedDay.route] : []),
+    [selectedDay],
+  );
   const handleDaySelect = useCallback(
     (dayId: string | null) => {
       if (onDaySelect) {
@@ -89,6 +86,8 @@ export const TripDetailView = ({
                 <section>
                   <h3>行程</h3>
                   <RouteListView
+                    day={selectedDay}
+                    trip={trip}
                     routes={
                       routes.length
                         ? routes
