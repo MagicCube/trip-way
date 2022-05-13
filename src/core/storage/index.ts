@@ -37,8 +37,10 @@ export async function deleteTrip(tripId: string) {
 }
 
 export async function saveTrip(trip: Trip) {
-  trip.lastModifiedTime = Date.now();
-  await db.trips.put(trip);
+  await db.trips.put({
+    ...trip,
+    lastModifiedTime: Date.now(),
+  });
 }
 
 export async function loadTrip(id: string) {
@@ -48,5 +50,6 @@ export async function loadTrip(id: string) {
 
 export async function loadTrips() {
   const trips = await db.trips.toArray();
+  trips.sort((a, b) => b.lastModifiedTime - a.lastModifiedTime);
   return trips;
 }
