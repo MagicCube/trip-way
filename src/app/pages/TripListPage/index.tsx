@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card } from 'antd';
+import { Button, Card, Popconfirm, Popover } from 'antd';
 import cn from 'classnames';
 import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
@@ -56,17 +56,18 @@ export const TripListPage = ({ className }: TripListPageProps) => {
                   <Card
                     className={styles.card}
                     extra={
-                      <Button
-                        type="link"
-                        size="small"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
+                      <Popconfirm
+                        title="确定要删除此旅程吗？"
+                        onConfirm={(e) => {
+                          e?.stopPropagation();
+                          e?.preventDefault();
                           handleDeleteTrip(trip.id);
                         }}
                       >
-                        删除
-                      </Button>
+                        <Button type="link" size="small">
+                          删除
+                        </Button>
+                      </Popconfirm>
                     }
                     title={trip.title}
                     style={{ width: 300 }}
