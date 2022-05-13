@@ -95,7 +95,7 @@ export const TripDetailPage = () => {
     [trip],
   );
   const handleTripChange = useCallback(
-    async (changedTrip: Trip, changedDay: TripDay | null) => {
+    async (changedTrip: Trip, changedDay?: TripDay | null) => {
       if (!trip) return;
       await replaceTripWith(changedTrip);
       if (changedDay) {

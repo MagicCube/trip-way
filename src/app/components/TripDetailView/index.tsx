@@ -9,6 +9,7 @@ import { ActivitiesEditor } from '../ActivitiesEditor';
 import { RouteListView } from '../RouteListView';
 import { TripBanner } from '../TripBanner';
 import { TripDayListView } from '../TripDayListView';
+import { TripInfoEditor } from '../TripInfoEditor';
 
 import styles from './index.module.less';
 
@@ -16,7 +17,7 @@ export interface TripDetailViewProps {
   className?: string;
   trip: Trip;
   selectedDayId: string | null;
-  onChange?: (trip: Trip, day: TripDay | null) => void;
+  onChange?: (trip: Trip, day?: TripDay | null) => void;
   onDaySelect?: (dayId: string | null) => void;
   onAppendDay?: () => void;
   onRemoveDay?: (dayId: string) => void;
@@ -72,7 +73,7 @@ export const TripDetailView = ({
           />
         </nav>
         <main className={styles.mainContent}>
-          {selectedDay && (
+          {selectedDay ? (
             <>
               <section>
                 <h3>目的地</h3>
@@ -116,6 +117,8 @@ export const TripDetailView = ({
                 </section>
               ) : null}
             </>
+          ) : (
+            <TripInfoEditor trip={trip} onChange={onChange} />
           )}
         </main>
       </main>
