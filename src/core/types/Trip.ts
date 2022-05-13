@@ -7,4 +7,6 @@ export interface Trip {
   coverImageURL: string;
   departureDate: string;
   days: TripDay[];
+  createdTime: number;
+  lastModifiedTime: number;
 }
