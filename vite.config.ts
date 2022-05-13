@@ -16,6 +16,6 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     https: true,
-    open: 'https://localhost:3000/trips/MOCK_9b145ee8',
+    open: 'https://localhost:3000/trip-way',
   },
 });
