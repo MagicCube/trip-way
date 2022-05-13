@@ -3,7 +3,7 @@ import antdLocale from 'antd/lib/locale/zh_CN';
 import moment from 'moment';
 import 'moment/dist/locale/zh-cn';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
 import { ready as AMapReady } from '@/core/geo';
 
@@ -29,7 +29,7 @@ async function main() {
 const AppRouter = () => {
   return (
     <div className="tw-app">
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/">
             <Route path="trips">
@@ -37,7 +37,7 @@ const AppRouter = () => {
             </Route>
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 };
